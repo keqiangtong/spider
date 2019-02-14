@@ -2,7 +2,8 @@
 
 import requests
 from lxml import etree
-import pprint
+
+#写完了是写完了，但是代码很混乱，后面的程序直接写出来了，没有提取出来变成函数，
 
 class QiubaiSpider():
 
@@ -48,14 +49,31 @@ class QiubaiSpider():
             span_list = html_str.xpath("//div[@id='content-left']/div")
 
 
-
+            dict_list = list()
             for span in span_list:
-
                 dict1 = dict()
-                dict1[span_list.index(span)] = span.xpath('.//span/text()') if len(span.xpath('./text()'))>0 else None
-                print(dict1)
+                dict1['content'] = span.xpath(".//div[@class='content']/span/text()") if len(span.xpath('./text()'))>0 else None
+                dict1['content'] = [i.replace('\n','') for i in dict1['content'] ]
 
-            break
+                dict1['name'] = span.xpath(".//h2/text()")[0].replace('\n', '') if len(span.xpath(".//h2/text()"))>0 else None
+
+                dict1['gender'] = span.xpath(".//div[contains(@class,'articleGender')]/@class")[0].split(' ')[-1].replace('Icon', '')\
+                    if len(span.xpath(".//div[contains(@class,'articleGender')]/@class"))>0 else None
+
+
+                dict1['age'] = span.xpath(".//div[contains(@class,'articleGender')]/text()")[0] \
+                    if len(span.xpath(".//div[contains(@class,'articleGender')]/text()"))>0 else None
+
+                dict_list.append(dict1)
+
+            for i in dict_list:
+                print(i)
+
+            print('*'*1000)
+
+
+
+
 
 
         #3.分析数据
