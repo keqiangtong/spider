@@ -1,6 +1,6 @@
 
 import requests
-import json
+import json_36kr
 class BaiduTranslate():
 
     def __init__(self,trans_str):
@@ -17,7 +17,7 @@ class BaiduTranslate():
     def send_post(self,url,data):
 
         response =requests.post(url,data=data,headers = self.headers)
-        return json.loads(response.content.decode())
+        return json_36kr.loads(response.content.decode())
 
     def run(self):
         #1. 检测语言

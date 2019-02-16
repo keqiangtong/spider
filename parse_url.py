@@ -8,6 +8,7 @@ headers = {
              AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372\
              Safari/604.1",
 
+<<<<<<< HEAD
             'cookie': 'gr_user_id=4e36b607-03ec-4b1a-a044-26e74bbdef8e;\
              _ga=GA1.2.561887751.1548248075; Hm_lvt_a68dc87e09b2a989eec1\
              a0669bfd59eb=1548248075,1548850522,1549365583,1549717086; gr\
@@ -25,6 +26,12 @@ headers = {
         }
 
 @retry(stop_max_attempt_number = 10)
+=======
+
+        }
+
+@retry(stop_max_attempt_number = 20)
+>>>>>>> e29552aa425780386f1c6ff9edc699434c411744
 def _parse_url(url):
     print('*'*10)
     response = requests.get(url,headers=headers)
@@ -42,7 +49,7 @@ def parse_url(url):
 
 
 if __name__ == '__main__':
-    rst = parse_url('http://www.baidu.com')
+    rst = parse_url('https://m.douban.com/rexxar/api/v2/subject_collection/movie_showing/items?start=0&count=18&loc_id=108288')
     print(rst)
 
 
