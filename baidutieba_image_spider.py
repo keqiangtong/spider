@@ -39,8 +39,11 @@ class BaiduImageSpider():
             dict['image'] = self.get_image(dict['link'],[])
             content_list.append(dict)
 
-        # next_url = html.xpath('//')
-        return content_list
+        next_url = 'https://tieba.baidu.com/mo/q---7E83BDA4A0518BBD6F164495D64CB595%3A\
+        FG%3D1--1-3-0--2--wapp_1550134575488_149/' + html.xpath("//a[text()='下一页']/@href")\
+            [0] if len(html.xpath("//a[text()='下一页']/@href"))>0 else None
+
+        return content_list,next_url
 
     def get_image(self,tiezi_url,total_list):
 
@@ -48,9 +51,10 @@ class BaiduImageSpider():
         tiezi_response = tiezi_response.content
 
         html = etree.HTML(tiezi_response)
-        image_list = html.xpath("//div[@class = 'i']/a[text()='图']/@href")
+        image_list = html.xpath("//div[contains(@class,'i')]/a[text()='图']/@href")
 
-        total_list.append(image_list)
+        if image_list != []:
+            total_list.append(image_list)
 
         next_url =  'https://tieba.baidu.com/mo/q---6A29DCC617E1619862D39261DFDBD601%3AFG%3D1--1-3-0--2--wapp_1550366534614_187/'+html.xpath("//a[text()='下一页']/@href")[0] if len(html.xpath("//a[text()='下一页']"))>0 else None
 
@@ -72,17 +76,22 @@ class BaiduImageSpider():
         #1.start_url
 
         #2.请求
-        html_str = self.parse_url(self.start_url)
+        next_url = self.start_url
+        while next_url is not None:
+
+            print('*' * 300)
+            html_str = self.parse_url(next_url)
 
 
-        #3.提取数据
-        content_list = self.get_info(html_str)
+            #3.提取数据
+            content_list,next_url = self.get_info(html_str)
 
-            #1.帖子题目
-            #2.帖子图片
+                #1.帖子题目
+                #2.帖子图片
 
-        #4.保存
-        self.save_info(content_list)
+            #4.保存
+            self.save_info(content_list)
+
 
 if __name__ == '__main__':
     baidu = BaiduImageSpider('猫')
